@@ -1,0 +1,11 @@
+---
+- hosts: pizeros
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Remove kubectl
+      shell: dpkg-query -l 'docker*' 
+
