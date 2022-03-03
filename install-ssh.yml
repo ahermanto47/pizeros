@@ -1,0 +1,28 @@
+---
+- hosts: pizeros
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: update ssh to take public key 
+      shell: |
+        sed -i 's/#PubkeyAuthentication/PubkeyAuthentication/' /etc/ssh/sshd_config
+        sed -i 's/#AuthorizedKeysFile/AuthorizedKeysFile/' /etc/ssh/sshd_config
+
+    - name: create ssh directory
+      action: file path=/home/pi/.ssh state=directory
+        owner=0 group=0 mode=0755
+      
+    - name: upload user key
+      action: copy src=/home/ahermanto/.ssh/id_rsa.pub
+        dest=/home/pi/.ssh/authorized_keys
+        owner=0 group=0 mode=0755
+      notify:
+      - restart ssh
+
+  handlers:
+    - name: restart ssh
+      service: name=ssh state=restarted
+
