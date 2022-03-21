@@ -1,22 +1,31 @@
 ---
 # Mapping of what hardware MAC addresses should be configured with specific IPs.
 mac_address_mapping:
-  "b8:27:eb:69:0d:c3":
-    name: kube1.pidramble.com
-    ip: "10.0.100.61"
-  "b8:27:eb:21:1b:f3":
-    name: kube2.pidramble.com
-    ip: "10.0.100.62"
-  "b8:27:eb:e3:be:21":
-    name: kube3.pidramble.com
-    ip: "10.0.100.63"
-  "b8:27:eb:09:4f:46":
-    name: kube4.pidramble.com
-    ip: "10.0.100.64"
+  "b8:27:eb:93:8e:d7":
+    name: server1.pizeros.org
+    ip: "192.168.1.235"
+  "b8:27:eb:ab:96:39":
+    name: server2.pizeros.org
+    ip: "192.168.1.236"
+  "b8:27:eb:e0:c6:f3":
+    name: server3.pizeros.org
+    ip: "192.168.1.237"
+  "b8:27:eb:19:cc:2c":
+    name: server4.pizeros.org
+    ip: "192.168.1.238"
+  "b8:27:eb:33:00:97":
+    name: server5.pizeros.org
+    ip: "192.168.1.241"
+  "b8:27:eb:81:83:55":
+    name: server6.pizeros.org
+    ip: "192.168.1.247"
+  "b8:27:eb:fb:80:da":
+    name: server7.pizeros.org
+    ip: "192.168.1.248"
 
 # Nameservers to use in resolv.conf.
 dns_nameservers:
   - "8.8.8.8"
   - "8.8.4.4"
 
-pizeros_ip_gateway: "191.168.1.1"
+pizeros_ip_gateway: "191.168.1.254"
