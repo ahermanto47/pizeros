@@ -1,0 +1,12 @@
+---
+- name: "Postgresql Setup"
+  hosts: dbservers
+  become: true
+  tasks:
+    - name: "Uninstall Packages"
+      apt:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - postgresql
+        - python3-psycopg2

@@ -1,0 +1,7 @@
+---
+# This playbook deploys a simple full stack.
+
+- hosts: all
+
+  roles:
+    - postgresql
