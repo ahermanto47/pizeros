@@ -1,0 +1,45 @@
+---
+
+- name: "Install Packages"
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - postgresql
+    - python3-psycopg2
+
+- name: "Start and enable services"
+  service: "name={{ item }} state=started enabled=yes"
+  with_items:
+    - postgresql
+
+- name: "Create app database"
+  postgresql_db:
+    state: present
+    name: "{{ db_name }}"
+  become: yes
+  become_user: postgres
+      
+- name: "Create db user"
+  postgresql_user:
+    state: present
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+  become: yes
+  become_user: postgres
+
+- name: "Grant db user access to app db"
+  postgresql_privs:
+    type: database
+    database: "{{ db_name }}"
+    roles: "{{ db_user }}"
+    grant_option: no
+    privs: all
+  become: yes
+  become_user: postgres
+
+- name: "Add some dummy data to our database"
+  become: true
+  become_user: postgres
+  shell: echo "CREATE TABLE IF NOT EXISTS test (message varchar(255) NOT NULL); INSERT INTO test(message) VALUES('Ansible is fun'); ALTER TABLE test OWNER TO 'admin';" | psql {{ db_name }}
+
