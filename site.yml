@@ -1,14 +1,17 @@
 ---
-- hosts: lbservers
+#- hosts: lbservers
+#  roles:
+#    - haproxy
+#
+#- hosts: webservers
+#  roles:
+#    - web
+#
+#- hosts: dbservers
+#  roles:
+#    - postgresql
+- hosts: appservers
   roles:
-    - haproxy
-
-- hosts: webservers
-  roles:
-    - web
-
-- hosts: dbservers
-  roles:
-    - postgresql
+    - jetty
 
     

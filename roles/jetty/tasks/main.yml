@@ -1,0 +1,45 @@
+---
+# This role installs HAProxy and configures it.
+
+- name: install java
+  apt:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items:
+    - openjdk-8-jdk
+
+- name: add group "jetty"
+  become: yes
+  group: name=jetty
+
+- name: add user "jetty"
+  user: name=jetty group=jetty home=/opt/jetty createhome=no
+  become: yes
+  become_method: sudo
+
+- name: Create jetty directory
+  become: yes
+  file: path=/opt/jetty state=directory recurse=yes
+  
+- name: Download jetty
+  become: yes
+  get_url: 
+    url: https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.4.45.v20220203/jetty-distribution-9.4.45.v20220203.tar.gz 
+    dest: /opt/jetty/jetty.tar.gz
+    mode: 0644
+
+- name: Extract archive
+  become: yes
+  shell: |
+    cd /opt/jetty 
+    tar xvf /opt/jetty/jetty.tar.gz
+    mv jetty-distribution-9.4.45.v20220203 runtime
+    cp runtime/bin/jetty.sh /etc/init.d/jetty
+    echo JETTY_HOME=`pwd`/runtime > /etc/default/jetty
+    rm jetty.tar.gz
+
+- name: Change ownership of jetty installation
+  become: yes
+  file: path=/opt/jetty owner=jetty group=jetty state=directory recurse=yes
+  notify: restart jetty

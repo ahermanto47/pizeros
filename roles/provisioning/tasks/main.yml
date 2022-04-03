@@ -1,0 +1,44 @@
+---
+- name: update apt packages
+  apt:
+    upgrade: yes
+    update_cache: yes
+
+- name: Set the current MAC address for eth0.
+  set_fact:
+    pizeros_mac_address: "{{ hostvars[inventory_hostname].ansible_default_ipv4.macaddress }}"
+
+- name: Set variables based on eth0 MAC address.
+  set_fact:
+    pizeros_hostname: "{{ mac_address_mapping[pizeros_mac_address].name }}"
+    pizeros_ip_address: "{{ mac_address_mapping[pizeros_mac_address].ip }}"
+
+- name: Set up networking-related files.
+  template:
+    src: "templates/{{ item.template }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { template: hostname.j2, dest: /etc/hostname }
+    - { template: hosts.j2, dest: /etc/hosts }
+    - { template: resolv.conf.j2, dest: /etc/resolv.conf }
+    - { template: dhcpcd.conf.j2, dest: /etc/dhcpcd.conf }
+  notify:
+    - update hostname
+    - delete dhcp leases
+
+- name: update ssh to take public key 
+  shell: |
+    sed -i 's/#PubkeyAuthentication/PubkeyAuthentication/' /etc/ssh/sshd_config
+    sed -i 's/#AuthorizedKeysFile/AuthorizedKeysFile/' /etc/ssh/sshd_config
+
+- name: create ssh directory
+  action: file path=/home/pi/.ssh state=directory
+    owner=0 group=0 mode=0755
+      
+- name: upload user key
+  action: copy src=/home/ahermanto/.ssh/id_rsa.pub
+    dest=/home/pi/.ssh/authorized_keys
+    owner=0 group=0 mode=0755
+  notify:
+    - restart ssh

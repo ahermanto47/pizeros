@@ -6,3 +6,34 @@ ntpserver: 192.168.1.2
 
 ansible_ssh_user: pi
 ansible_ssh_private_key_file: /home/ahermanto/.ssh/id_rsa.pub
+
+# Mapping of what hardware MAC addresses should be configured with specific IPs.
+mac_address_mapping:
+  "b8:27:eb:93:8e:d7":
+    name: server1.pizeros.org
+    ip: "192.168.1.235"
+  "b8:27:eb:ab:96:39":
+    name: server2.pizeros.org
+    ip: "192.168.1.236"
+  "b8:27:eb:e0:c6:f3":
+    name: server3.pizeros.org
+    ip: "192.168.1.237"
+  "b8:27:eb:19:cc:2c":
+    name: server4.pizeros.org
+    ip: "192.168.1.238"
+  "b8:27:eb:33:00:97":
+    name: server5.pizeros.org
+    ip: "192.168.1.241"
+  "b8:27:eb:81:83:55":
+    name: server6.pizeros.org
+    ip: "192.168.1.247"
+  "b8:27:eb:fb:80:da":
+    name: server7.pizeros.org
+    ip: "192.168.1.248"
+
+# Nameservers to use in resolv.conf.
+dns_nameservers:
+  - "8.8.8.8"
+  - "8.8.4.4"
+
+pizeros_ip_gateway: "191.168.1.254"
