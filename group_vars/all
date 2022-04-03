@@ -1,0 +1,8 @@
+---
+# Variables here are applicable to all host groups
+
+httpd_port: 80
+ntpserver: 192.168.1.2
+
+ansible_ssh_user: pi
+ansible_ssh_private_key_file: /home/ahermanto/.ssh/id_rsa.pub

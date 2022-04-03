@@ -1,7 +1,14 @@
 ---
-# This playbook deploys a simple full stack.
+- hosts: lbservers
+  roles:
+    - haproxy
+
+- hosts: webservers
+  roles:
+    - web
 
 - hosts: dbservers
-
   roles:
     - postgresql
+
+    

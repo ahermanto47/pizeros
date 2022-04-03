@@ -1,0 +1,34 @@
+---
+- name: "Uninstall Postgresql"
+  hosts: dbservers
+  become: true
+  tasks:
+    - name: "Uninstall Packages"
+      apt:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - postgresql
+        - python3-psycopg2
+
+- name: "Uninstall apache2"
+  hosts: webservers
+  become: true
+  tasks:
+    - name: "Uninstall Packages"
+      apt:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - apache2
+        
+- name: "Uninstall haproxy"
+  hosts: lbservers
+  become: true
+  tasks:
+    - name: "Uninstall Packages"
+      apt:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - haproxy
