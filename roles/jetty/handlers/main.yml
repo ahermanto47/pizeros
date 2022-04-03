@@ -1,4 +1,4 @@
 ---
 
-- name: restart jetty
-  service: name=jetty state=restarted
+- name: start jetty
+  service: name=jetty state=started

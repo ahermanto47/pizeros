@@ -1,5 +1,5 @@
 ---
-- name: "Uninstall Postgresql"
+- name: "Uninstall postgresql"
   hosts: dbservers
   become: true
   tasks:
@@ -22,6 +22,10 @@
       with_items:
         - apache2
         
+    - name: "Remove jetty directory"
+      file: path=/var/www/html/index.html state=absent
+
+        
 - name: "Uninstall haproxy"
   hosts: lbservers
   become: true
@@ -33,7 +37,7 @@
       with_items:
         - haproxy
 
-- name: "Uninstall java"
+- name: "Uninstall jetty"
   hosts: appservers
   become: true
   tasks:
@@ -49,11 +53,9 @@
         - openjdk-8-jdk
 
     - name: Change ownership of jetty installation
-      become: yes
       file: path=/opt/jetty owner=root group=root state=directory recurse=yes
   
     - name: "Remove jetty directory"
-      become: yes
       file: path=/opt/jetty state=absent
 
 - name: "Uninstall java"

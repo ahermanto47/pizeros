@@ -1,17 +1,21 @@
 ---
-#- hosts: lbservers
-#  roles:
-#    - haproxy
-#
-#- hosts: webservers
-#  roles:
-#    - web
-#
-#- hosts: dbservers
-#  roles:
-#    - postgresql
-- hosts: appservers
+- name: "Setup Databases"
+  hosts: dbservers
+  become: yes
   roles:
-    - jetty
-
-    
+  - postgresql
+- name: "Setup Application Servers"
+  hosts: appservers
+  become: yes
+  roles:
+  - jetty
+- name: "Setup Web Servers"
+  hosts: webservers
+  become: yes
+  roles:
+  - web
+- name: "Setup Load Balancers"
+  hosts: lbservers
+  become: yes
+  roles:
+  - haproxy
