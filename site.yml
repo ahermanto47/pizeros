@@ -3,19 +3,23 @@
   hosts: dbservers
   become: yes
   roles:
-  - postgresql
+    - role: postgresql
+      tags: postgresql
 - name: "Setup Application Servers"
   hosts: appservers
   become: yes
   roles:
-  - jetty
+    - role: jetty
+      tags: jetty
 - name: "Setup Web Servers"
   hosts: webservers
   become: yes
   roles:
-  - web
+    - role: web
+      tags: web
 - name: "Setup Load Balancers"
   hosts: lbservers
   become: yes
   roles:
-  - haproxy
+    - role: haproxy
+      tags: haproxy

@@ -29,8 +29,12 @@ defaults
     timeout check           10s
     maxconn                 3000
 
-backend app
+frontend  www
+    bind                        *:80
+    default_backend             web
+    
+backend web
     balance     {{ balance }}
     {% for host in groups.webservers %}
-        server {{ host }} {{ host }}:{{ httpd_port }}
+    server {{ host }} {{ host }}:{{ httpd_port }} check
     {% endfor %}
