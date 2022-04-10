@@ -31,10 +31,26 @@
     type: database
     database: "{{ db_name }}"
     roles: "{{ db_user }}"
-    grant_option: no
+    grant_option: yes
     privs: all
   become_user: postgres
 
 - name: "Add some dummy data to our database"
   become_user: postgres
   shell: echo "CREATE TABLE IF NOT EXISTS test (message varchar(255) NOT NULL); INSERT INTO test(message) VALUES('Ansible is fun'); ALTER TABLE test OWNER TO 'admin';" | psql {{ db_name }}
+
+- name: Set up network and user config
+  template:
+    src: "templates/{{ item.template }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - { template: pg_hba.conf.j2, dest: /etc/postgresql/13/main }
+    - { template: postgresql.conf.j2, dest: /etc/postgresql/13/main }
+  notify:
+    - restart postgresql
+        
+- name: Check that you can run a query on the postgresql instance
+  become: false
+  local_action:
+    module: postgresql_query  login_host={{ ansible_hostname }} db=testdb login_user=admin login_password=Passw0rd  query="select message from test"

@@ -14,3 +14,9 @@
 
 - name: Start the haproxy service
   service: name=haproxy state=started enabled=yes
+
+- name: Check that you can connect (GET) loadbalancer and get a status 200
+  become: false
+  local_action:
+    module: uri url=http://{{ ansible_hostname }}
+  

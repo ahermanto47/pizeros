@@ -18,3 +18,9 @@
     name: apache2
     state: started
   when: apache.changed
+  
+- name: Check that you can connect (GET) webserver and get a status 200
+  become: false
+  local_action:
+    module: uri url=http://{{ ansible_hostname }}
+    
